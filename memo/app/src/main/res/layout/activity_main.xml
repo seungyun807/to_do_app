@@ -12,7 +12,7 @@
     <FrameLayout
         android:id="@+id/content_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#f9e5bc" >
+            android:background="#f9e5bc">
 
         </androidx.recyclerview.widget.RecyclerView>
 
@@ -42,17 +42,16 @@
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_view"
+        android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
         android:background="@color/cardview_light_background"
         app:itemBackground="@color/cardview_light_background"
         app:itemIconTint="@color/colorAccent"
         app:itemTextColor="@color/colorAccent"
         app:labelVisibilityMode="unlabeled"
+        app:layout_constraintBottom_toBottomOf="@+id/container"
         app:menu="@menu/menu_bottom" />
 
 

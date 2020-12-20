@@ -10,13 +10,24 @@
         android:layout_height="wrap_content"
         android:text="내 위치 요청하기" />
 
-    <EditText
-        android:id="@+id/shop_editText_search"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name" />
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/shop_editText_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="주소를 입력해주세요." />
+
+        <Button
+            android:id="@+id/shop_button_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="검색" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/shop_text_location"
@@ -25,10 +36,10 @@
         android:text="TextView" />
 
     <Button
-        android:id="@+id/shop_button_search"
+        android:id="@+id/get_adress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="가져오기" />
 
     <fragment
         android:id="@+id/map"

@@ -1,28 +1,23 @@
 package org.techtown.memo;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class UpdateMemo extends AppCompatActivity {
 
-    EditText edtText, edtTitle;
+    EditText edtText, edtTitle, edtAddress;
 
     SQLiteHelper dbHelper;
     Memo memoList;
-    String i, title, text;
+    String i, title, text, address;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +25,7 @@ public class UpdateMemo extends AppCompatActivity {
 
         edtTitle = findViewById(R.id.edtTitle);
         edtText = findViewById(R.id.edtMemo);
-
+        edtAddress = findViewById(R.id.edtAddress);
 
        // String text = memoList.getMaintext();
         //edtText.setText(Memo.);
@@ -38,7 +33,9 @@ public class UpdateMemo extends AppCompatActivity {
         i = intent.getStringExtra("i");
         title = intent.getStringExtra("title");
         text = intent.getStringExtra("maintext");
+        address = intent.getStringExtra("address");
 
+        edtAddress.setText(address);
         edtText.setText(text);
         edtTitle.setText(title);
         //Toast.makeText(UpdateMemo.this, text, Toast.LENGTH_SHORT).show();
@@ -53,6 +50,7 @@ public class UpdateMemo extends AppCompatActivity {
                // String maintext = edtText.getText().toString();
                 String title = edtTitle.getText().toString();
                 String maintext = edtText.getText().toString();
+                String address = edtAddress.getText().toString();
 
                 if(maintext.length() > 0){
                     Date date = new Date();
@@ -62,6 +60,7 @@ public class UpdateMemo extends AppCompatActivity {
                     String seq = i;
                     Intent intent = new Intent();
                     intent.putExtra("title", title);
+                    intent.putExtra("address", address);
                     intent.putExtra("main", maintext);
                     intent.putExtra("sub", substr);
                     intent.putExtra("work", work);

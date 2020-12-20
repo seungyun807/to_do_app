@@ -1,6 +1,7 @@
 package org.techtown.memo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,7 +31,16 @@ import com.pedro.library.AutoPermissionsListener;
 
 import org.techtown.memo.R;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class MapsFragment extends AppCompatActivity implements AutoPermissionsListener {
 
@@ -40,6 +51,7 @@ public class MapsFragment extends AppCompatActivity implements AutoPermissionsLi
 
     EditText searchBox;
     TextView locationText;
+    String address;
 
 
 
@@ -49,7 +61,6 @@ public class MapsFragment extends AppCompatActivity implements AutoPermissionsLi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
 
 
         super.onCreate(savedInstanceState);
@@ -86,6 +97,7 @@ public class MapsFragment extends AppCompatActivity implements AutoPermissionsLi
 
         Button searchButton = findViewById(R.id.shop_button_search);
 
+
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,12 +113,37 @@ public class MapsFragment extends AppCompatActivity implements AutoPermissionsLi
                     if (addresses != null && !addresses.equals(" ")) {
                         search(addresses);
                     }
-                } catch(Exception e) {
+                } catch (Exception e) {
 
                 }
 
+
+                address = getCurrentAddress(addresses);
+                locationText.setText(address);
+
+
             }
         });
+
+        Button get_address = findViewById(R.id.get_adress);
+
+        get_address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MapsFragment.this, address + " 가 작성되었습니다.", Toast.LENGTH_SHORT).show();
+
+
+                Intent intent = new Intent();
+                intent.putExtra("address", address);
+                setResult(0, intent);
+
+                finish();
+            }
+        });
+
+
+
+
 
 
     }
@@ -134,6 +171,44 @@ public class MapsFragment extends AppCompatActivity implements AutoPermissionsLi
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         map.animateCamera(CameraUpdateFactory.zoomTo(15));
     }
+
+    public String getCurrentAddress(List<Address> addresses) {
+        Address address = addresses.get(0);
+        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+        //지오코더... GPS를 주소로 변환
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+
+
+        try {
+
+            addresses = geocoder.getFromLocation(
+                    address.getLatitude(),
+                    address.getLongitude(),
+                    7);
+        } catch (IOException ioException) {
+            //네트워크 문제
+            Toast.makeText(this, "지오코더 서비스 사용불가", Toast.LENGTH_LONG).show();
+            return "지오코더 서비스 사용불가";
+        } catch (IllegalArgumentException illegalArgumentException) {
+            Toast.makeText(this, "잘못된 GPS 좌표", Toast.LENGTH_LONG).show();
+            return "잘못된 GPS 좌표";
+
+        }
+
+
+
+        if (addresses == null || addresses.size() == 0) {
+            Toast.makeText(this, "주소 미발견", Toast.LENGTH_LONG).show();
+            return "주소 미발견";
+
+        }
+
+        Address address2 = addresses.get(0);
+        return address2.getAddressLine(0).toString()+"\n";
+
+    }
+
 
     public void startLocationService() {
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);

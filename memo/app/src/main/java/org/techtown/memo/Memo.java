@@ -8,22 +8,25 @@ public class Memo {
     String maintext; //메모
     String title; // 내
     String subtext; // 날짜
+    String address; // 장소
     int isdone; // 완료여부
 
-    public Memo(int seq, String title, String maintext, String subtext, int isdone) {
+    public Memo(int seq, String title, String address, String maintext, String subtext, int isdone) {
         this.seq = seq;
         //this.num = num;용
+        this.address = address;
         this.title = title;
         this.maintext = maintext;
         this.subtext = subtext;
         this.isdone = isdone;
     }
 
-    public Memo(String title, String maintext, String subtext, int isdone) {
+    public Memo(String title, String address, String maintext, String subtext, int isdone) {
         this.maintext = maintext;
         this.title = title;
         this.subtext = subtext;
         this.isdone = isdone;
+        this.address = address;
     }
 
     public int getSeq() {
@@ -32,6 +35,13 @@ public class Memo {
 
     public void setSeq(int seq) {
         this.seq = seq;
+    }
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String subtext) {
+        this.address = address;
     }
 
     public String getId() {

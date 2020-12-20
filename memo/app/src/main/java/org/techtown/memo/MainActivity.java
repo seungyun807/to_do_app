@@ -17,10 +17,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -38,8 +38,6 @@ public class MainActivity extends AppCompatActivity {
     int update;
 
    // BottomNavigationView bottomNavigationView;
-    //Fragment_page_1 fragmentPage1;
-    //Fragment_page_2 fragmentPage2;
 
     private BottomNavigationView mBottomNV;
 
@@ -47,9 +45,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
        // bottomNavigationView = findViewById(R.id.bottomNavigationView);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         //i = new SQLiteHelper()
         dbHelper = new SQLiteHelper(MainActivity.this);
@@ -79,8 +79,7 @@ public class MainActivity extends AppCompatActivity {
                             startActivityForResult(intent, 0);
                         }
                     });
-
-        mBottomNV = findViewById(R.id.nav_view);
+        mBottomNV = findViewById(R.id.bottom_navigation);
         mBottomNV.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() { //NavigationItemSelecte
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -90,7 +89,14 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        mBottomNV.setSelectedItemId(R.id.navigation_1);
+        mBottomNV.setSelectedItemId(R.id.tab1);
+
+
+
+
+
+
+
     }
     private void BottomNavigate(int id) {  //BottomNavigation 페이지 변경
         String tag = String.valueOf(id);
@@ -104,13 +110,13 @@ public class MainActivity extends AppCompatActivity {
 
         Fragment fragment = fragmentManager.findFragmentByTag(tag);
         if (fragment == null) {
-            if (id == R.id.navigation_1) {
+            if (id == R.id.tab1) {
                 fragment = new FragmentPage1();
 
-            } else if (id == R.id.navigation_2){
+            } else if (id == R.id.tab2){
 
                 fragment = new FragmentPage2();
-            }else if (id == R.id.navigation_3){
+            }else if (id == R.id.tab3){
                 fragment = new FragmentPage3();
             } else {
                 //fragment = new MapsFragment();
@@ -144,20 +150,22 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == 0){
             String strTitle = data.getStringExtra("title");
             String strMain = data.getStringExtra("main");
-
+            String strAdr = data.getStringExtra("address"); // 여기서부터
             String strSub = data.getStringExtra("sub");
             String i = data.getStringExtra("work");
             String seq = data.getStringExtra("seq");
 
+            Toast.makeText(MainActivity.this, strAdr + " 가 작성되었습니다.", Toast.LENGTH_SHORT).show();
+
             if (i.compareTo("삽입") == 0){
-                Memo memo = new Memo(strTitle, strMain, strSub, 0);
+                Memo memo = new Memo(strTitle, strAdr, strMain,  strSub, 0);
                 recyclerAdapter.addItem(memo);
                 recyclerAdapter.notifyDataSetChanged();
                 dbHelper.insertMemo(memo);
 
             } else {
                 int pk = Integer.parseInt(seq);
-                Memo memo = new Memo(pk, strTitle, strMain, strSub, 0);
+                Memo memo = new Memo(pk, strTitle, strAdr, strMain, strSub, 0);
                 //recyclerAdapter.addItem(memo);
                 //recyclerAdapter.notifyDataSetChanged();
                 dbHelper.updateMemo(memo);
@@ -182,7 +190,8 @@ public class MainActivity extends AppCompatActivity {
             private TextView title;
             private TextView subtext;
             private TextView maintext;
-
+            private CheckBox todo;
+            private TextView address;
             // int id2 = (int)maintext.getTag();
             // String id = Integer.toString(id2);
 
@@ -201,11 +210,13 @@ public class MainActivity extends AppCompatActivity {
                             String i = Integer.toString(seq);
                             String str = (String)maintext.getText();
                             String str2 = (String)title.getText();
+                            String str3 = (String)address.getText();
                             //String str3 = (String)text.getText();
                             Intent intent = new Intent(MainActivity.this, UpdateMemo.class);
                             intent.putExtra("i", i); // 업데이트 변수 확인
                             intent.putExtra("maintext", str);
                             intent.putExtra("title", str2);
+                            intent.putExtra("address", str3);
                             startActivityForResult(intent, 0);
 
 
@@ -217,7 +228,9 @@ public class MainActivity extends AppCompatActivity {
                 id = itemView.findViewById(R.id.item_maintext1);
                 title = itemView.findViewById(R.id.item_title);
                 maintext = itemView.findViewById(R.id.item_maintext);
+                address = itemView.findViewById(R.id.item_address);
                 subtext = itemView.findViewById(R.id.item_subtext);
+                todo = itemView.findViewById(R.id.todo);
                 //img = itemView.findViewById(R.id.item_image);
 
                 itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -262,6 +275,34 @@ public class MainActivity extends AppCompatActivity {
                         return false;
                     }
                 });
+
+                todo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int position = getAdapterPosition();
+                        int seq = (int)title.getTag();
+                        if(position != RecyclerView.NO_POSITION){
+
+                            int i = dbHelper.isdoneMemo(seq);
+                            Toast.makeText(getApplicationContext(), Integer.toString(i), Toast.LENGTH_SHORT).show();
+
+                            //todo.setChecked(true);
+/*
+                            if(todo.isChecked() != true) {
+                                dbHelper.isdoneMemo(1, seq);
+                                todo.setChecked(false);
+
+                            } else {
+                                dbHelper.isdoneMemo(0, seq);
+                                todo.setChecked(true);
+                                Toast.makeText(getApplicationContext(), "2번.", Toast.LENGTH_SHORT).show();
+                            }*/
+                            //notifyDataSetChanged();
+                        }
+
+                        //Toast.makeText(getApplicationContext(), "클릭됌.", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
         }
@@ -289,11 +330,17 @@ public class MainActivity extends AppCompatActivity {
             Memo memo = listdata.get(i);
 
 
-            itemViewHolder.id.setText(memo.getId()+"번째 메모");
+            itemViewHolder.id.setText("no. "+memo.getId());
             itemViewHolder.title.setTag(memo.getSeq());
             itemViewHolder.title.setText(memo.getTitle());
             itemViewHolder.maintext.setText(memo.getMaintext());
             itemViewHolder.subtext.setText(memo.getSubtext());
+            itemViewHolder.address.setText(memo.getAddress());
+
+            //itemViewHolder.todo.setChecked(true);
+            if(memo.getIsdone() == 0){
+                itemViewHolder.todo.setChecked(false);
+            } else {itemViewHolder.todo.setChecked(true);}
             //itemViewHolder.num.setText(String.valueOf(memo.getSeq()));
             //int num = memo.getSeq();
             //String num = Integer.toString(memo.getSeq());
