@@ -10,6 +10,26 @@
         android:layout_height="wrap_content"
         android:text="내 위치 요청하기" />
 
+    <EditText
+        android:id="@+id/shop_editText_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name" />
+
+    <TextView
+        android:id="@+id/shop_text_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/shop_button_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Button" />
+
     <fragment
         android:id="@+id/map"
         android:layout_width="match_parent"
