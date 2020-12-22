@@ -40,7 +40,9 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -52,7 +54,8 @@
         <activity android:name=".UpdateMemo" />
         <activity android:name=".SQLiteHelper" />
         <activity android:name=".MapsFragment"/>
-        <activity android:name=".FragmentPage3"/>
+
+        <activity android:name=".Youtube"/>
     </application>
 
 </manifest>

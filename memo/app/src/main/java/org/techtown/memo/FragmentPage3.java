@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -20,18 +21,20 @@ import org.techtown.memo.R;
 public class FragmentPage3 extends Fragment {
 
 
-    Button button;
+
     @Override
     public void onCreate(Bundle savedInstanceStace){
         super.onCreate(savedInstanceStace);
-       // Intent intent = new Intent(getActivity(),Youtube.class);
-       // startActivity(intent);
-       // button.setOnClickListener(new View.OnClickListener(){
-        //    @Override
-       //     public void onClick(View v){
 
-       // //    }
-        //});
+
+
+        Intent intent = new Intent(getActivity(), Youtube.class);
+        startActivity(intent);
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction().remove(FragmentPage3.this).commit();
+        fragmentManager.popBackStack();
+
     }
 
 
@@ -39,8 +42,9 @@ public class FragmentPage3 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
         return inflater.inflate(R.layout.fragment_page_3, container, false);
     }
 
+
 }
+
